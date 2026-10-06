@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Student Performance Prediction System</h1>
+            <div class="subtitle">Predict student academic performance using Machine Learning</div>
+            <p class="description">
+                This system uses Machine Learning to predict whether a student is likely to Pass or Fail based on academic performance and study-related factors.
+            </p>
+        </div>
+
+        {% if error %}
+            <div class="alert">
+                ❌ {{ error }}
+            </div>
+        {% endif %}
+
+        <form action="{{ url_for('predict') }}" method="POST" class="prediction-form" id="predictionForm">
+            <!-- 1. Attendance Percentage -->
+            <div class="form-group">
+                <label for="attendance">1. Attendance Percentage (%)</label>
+                <input 
+                    type="number" 
+                    id="attendance" 
+                    name="attendance" 
+                    min="0" 
+                    max="100" 
+                    step="0.1" 
+                    placeholder="e.g. 85" 
+                    value="{{ form_data.get('attendance', '') }}" 
+                    required
+                >
+                <span class="hint">Valid range: 0% to 100%</span>
+            </div>
+
+            <!-- 2. Internal Marks -->
+            <div class="form-group">
+                <label for="internal_marks">2. Internal Marks (Out of 100)</label>
+                <input 
+                    type="number" 
+                    id="internal_marks" 
+                    name="internal_marks" 
+                    min="0" 
+                    max="100" 
+                    step="0.1" 
+                    placeholder="e.g. 72" 
+                    value="{{ form_data.get('internal_marks', '') }}" 
+                    required
+                >
+                <span class="hint">Valid range: 0 to 100</span>
+            </div>
+
+            <!-- 3. Study Hours per Day -->
+            <div class="form-group">
+                <label for="study_hours">3. Study Hours Per Day</label>
+                <input 
+                    type="number" 
+                    id="study_hours" 
+                    name="study_hours" 
+                    min="0" 
+                    max="24" 
+                    step="0.5" 
+                    placeholder="e.g. 4" 
+                    value="{{ form_data.get('study_hours', '') }}" 
+                    required
+                >
+                <span class="hint">Valid range: 0 to 24 hours/day</span>
+            </div>
+
+            <!-- 4. Previous Performance Percentage -->
+            <div class="form-group">
+                <label for="previous_performance">4. Previous Performance Percentage (%)</label>
+                <input 
+                    type="number" 
+                    id="previous_performance" 
+                    name="previous_performance" 
+                    min="0" 
+                    max="100" 
+                    step="0.1" 
+                    placeholder="e.g. 70" 
+                    value="{{ form_data.get('previous_performance', '') }}" 
+                    required
+                >
+                <span class="hint">Valid range: 0% to 100%</span>
+            </div>
+
+            <!-- 5. Assignment Score -->
+            <div class="form-group">
+                <label for="assignment_score">5. Assignment Score (Out of 100)</label>
+                <input 
+                    type="number" 
+                    id="assignment_score" 
+                    name="assignment_score" 
+                    min="0" 
+                    max="100" 
+                    step="0.1" 
+                    placeholder="e.g. 80" 
+                    value="{{ form_data.get('assignment_score', '') }}" 
+                    required
+                >
+                <span class="hint">Valid range: 0 to 100</span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">Predict Performance</button>
+        </form>
+
+        <div class="footer-note">
+            Machine Learning Models: Decision Tree &amp; Logistic Regression
+        </div>
+    </div>
+
+    <!-- Simple JavaScript Client-Side Validation -->
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            const attendance = parseFloat(document.getElementById('attendance').value);
+            const internalMarks = parseFloat(document.getElementById('internal_marks').value);
+            const studyHours = parseFloat(document.getElementById('study_hours').value);
+            const previousPerf = parseFloat(document.getElementById('previous_performance').value);
+            const assignmentScore = parseFloat(document.getElementById('assignment_score').value);
+
+            if (isNaN(attendance) || attendance < 0 || attendance > 100) {
+                alert('Please enter a valid Attendance percentage between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+            if (isNaN(internalMarks) || internalMarks < 0 || internalMarks > 100) {
+                alert('Please enter valid Internal Marks between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+            if (isNaN(studyHours) || studyHours < 0 || studyHours > 24) {
+                alert('Please enter valid Study Hours between 0 and 24.');
+                e.preventDefault();
+                return;
+            }
+            if (isNaN(previousPerf) || previousPerf < 0 || previousPerf > 100) {
+                alert('Please enter a valid Previous Performance percentage between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+            if (isNaN(assignmentScore) || assignmentScore < 0 || assignmentScore > 100) {
+                alert('Please enter a valid Assignment Score between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+        });
+    </script>
+</body>
+</html>

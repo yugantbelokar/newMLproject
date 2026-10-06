@@ -1,0 +1,194 @@
+# Student Performance Prediction System Using Machine Learning
+
+---
+
+## 1. Project Title
+**Student Performance Prediction System Using Machine Learning**
+
+---
+
+## 2. Project Description
+The **Student Performance Prediction System** is a lightweight, web-based Machine Learning application built using Python, Flask, HTML/CSS/JavaScript, and Scikit-Learn. It allows educators and students to predict whether a student is likely to **PASS** or **FAIL** an academic course based on their study habits, attendance record, internal assessments, previous marks, and assignment performance.
+
+---
+
+## 3. Objective
+To build a simple, clean, and transparent machine learning web system for predicting student academic outcome to enable early identification of at-risk students who need academic guidance or intervention.
+
+---
+
+## 4. Features
+- **Interactive Web Interface**: Simple and clean form built with modern HTML5/CSS3.
+- **Real-Time Machine Learning Inference**: Instant prediction using trained Scikit-Learn classifier.
+- **Pass Probability Score**: Displays confidence percentage for predictions.
+- **Robust Input Validation**: Strict validation both on client-side (JS) and server-side (Flask) for data bounds.
+- **Model Comparison & Automatic Selection**: Evaluates both Decision Tree Classifier and Logistic Regression, automatically saving the best model.
+- **Viva-Friendly Codebase**: Clean structure with modular functions and extensive comments.
+
+---
+
+## 5. Technologies Used
+- **Backend Framework**: Python 3.12, Flask
+- **Machine Learning Libraries**: Pandas, NumPy, Scikit-learn, Joblib
+- **Frontend Technologies**: HTML5, CSS3, JavaScript (Vanilla)
+- **Data Storage**: CSV (`dataset.csv`)
+
+---
+
+## 6. Machine Learning Algorithms
+1. **Decision Tree Classifier**: A non-parametric supervised learning algorithm that creates tree-like decision logic based on feature thresholds (e.g. `study_hours > 4`).
+2. **Logistic Regression**: A probabilistic linear classifier that estimates the probability of binary outcomes using the sigmoid function:
+   $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+
+---
+
+## 7. Input Features
+| Feature Name | Description | Valid Range |
+| :--- | :--- | :--- |
+| `attendance` | Attendance Percentage | `0` to `100` (%) |
+| `internal_marks` | Internal Assessment Score | `0` to `100` |
+| `study_hours` | Average Daily Study Hours | `0` to `24` (hrs/day) |
+| `previous_performance` | Previous Exam Percentage | `0` to `100` (%) |
+| `assignment_score` | Total Assignment Marks | `0` to `100` |
+
+---
+
+## 8. System Workflow
+```
+[User Input Form] 
+       │
+       ▼
+[Client-side JS Validation] ──(Valid)──► [Flask POST /predict]
+                                                 │
+                                                 ▼
+                                     [Server-side Validation]
+                                                 │
+                                                 ▼
+                                       [Load model.pkl]
+                                                 │
+                                                 ▼
+                                     [ML Model Predict & Proba]
+                                                 │
+                                                 ▼
+                                        [Render result.html]
+```
+
+---
+
+## 9. Project Structure
+```
+Student-Performance-Prediction/
+│
+├── app.py                  # Main Flask application server & routing
+├── train_model.py          # Machine learning model training & evaluation script
+├── dataset.csv             # Synthetic student dataset (200 records)
+├── model.pkl               # Saved binary of trained ML model
+├── requirements.txt        # Python package dependencies
+├── README.md               # Detailed project documentation & viva guide
+│
+├── templates/
+│   ├── index.html          # Form page for user input
+│   └── result.html         # Output page showing prediction & details
+│
+└── static/
+    └── style.css           # Styling sheet for clean UI
+```
+
+---
+
+## 10. How the ML Model Works
+1. Data loaded from `dataset.csv`.
+2. Target variable mapped: `'Pass' -> 1`, `'Fail' -> 0`.
+3. Dataset split into 80% Training set and 20% Testing set using stratified sampling (`train_test_split`).
+4. Both **Decision Tree Classifier** and **Logistic Regression** are trained on training data.
+5. Models evaluated on test data using Accuracy, Precision, Recall, and F1 Score:
+   - $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+   - $$\text{Precision} = \frac{TP}{TP + FP}$$
+   - $$\text{Recall} = \frac{TP}{TP + FN}$$
+   - $$\text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+6. The model achieving higher performance is serialized and saved as `model.pkl` via `joblib.dump()`.
+
+---
+
+## 11. How to Install Dependencies
+Open terminal/command prompt in the project root directory and run:
+
+```bash
+pip install -r requirements.txt
+```
+*Explanation: Downloads and installs required Python libraries (Flask, Pandas, NumPy, Scikit-learn, Joblib).*
+
+---
+
+## 12. How to Train the Model
+Run the model training script:
+
+```bash
+python train_model.py
+```
+*Explanation: Reads `dataset.csv`, trains models, prints evaluation metrics to the terminal, and exports `model.pkl`.*
+
+### Sample Evaluation Output:
+```text
+============================================================
+                 MODEL EVALUATION RESULTS
+============================================================
+
+1. Decision Tree Classifier:
+   - Decision Tree Accuracy  : 97.50%
+   - Decision Tree Precision : 100.00%
+   - Decision Tree Recall    : 95.00%
+   - Decision Tree F1 Score  : 97.44%
+
+2. Logistic Regression:
+   - Logistic Regression Accuracy  : 100.00%
+   - Logistic Regression Precision : 100.00%
+   - Logistic Regression Recall    : 100.00%
+   - Logistic Regression F1 Score  : 100.00%
+
+==================================================
+ Best Model Selected: Logistic Regression
+ Best Accuracy      : 100.00%
+ Best F1 Score      : 100.00%
+==================================================
+```
+
+---
+
+## 13. How to Run the Flask Application
+Start the Flask web server:
+
+```bash
+python app.py
+```
+*Explanation: Starts local HTTP server on port 5000.*
+
+Open your web browser and navigate to:
+`http://127.0.0.1:5000/`
+
+---
+
+## 14. Example Input
+| Attendance | Internal Marks | Study Hours | Previous Performance | Assignment Score |
+| :---: | :---: | :---: | :---: | :---: |
+| 85% | 72 | 4 hrs/day | 70% | 80 |
+
+---
+
+## 15. Example Output
+- **Prediction**: `PASS ✅`
+- **Pass Probability**: `98.5%`
+- **Message**: "The student is predicted to PASS."
+
+---
+
+## 16. Limitations
+- Uses a synthetic sample dataset of 200 records.
+- Focuses on 5 numerical features; does not incorporate qualitative factors like health or extracurricular activity.
+
+---
+
+## 17. Future Scope
+- Integration with institutional student database (SQL/PostgreSQL).
+- Inclusion of real-time academic risk alerts sent via Email/SMS.
+- Adding feature importance charts (SHAP / feature breakdown).

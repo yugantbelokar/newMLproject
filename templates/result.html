@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Student Performance Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container result-card">
+        <div class="header">
+            <h1>Student Performance Result</h1>
+            <div class="subtitle">Machine Learning Prediction Output</div>
+        </div>
+
+        <!-- Prediction Result Badge -->
+        <div class="result-badge-container">
+            {% if result == 'PASS' %}
+                <div class="result-badge pass">
+                    PASS ✅
+                </div>
+            {% else %}
+                <div class="result-badge fail">
+                    FAIL ❌
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Result Statement -->
+        <p class="result-message">
+            {% if result == 'PASS' %}
+                The student is predicted to <strong>PASS</strong>.
+            {% else %}
+                The student is predicted to <strong>FAIL</strong>.
+            {% endif %}
+        </p>
+
+        <!-- Prediction Probability Box -->
+        <div class="probability-box">
+            <div class="probability-title">Pass Probability</div>
+            <div class="probability-value">{{ pass_probability }}%</div>
+        </div>
+
+        <!-- Submitted Input Details Summary -->
+        <div class="details-section">
+            <h3>Student Performance Input Summary</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Attendance</div>
+                    <div class="detail-value">{{ inputs.attendance }}%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Internal Marks</div>
+                    <div class="detail-value">{{ inputs.internal_marks }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Study Hours</div>
+                    <div class="detail-value">{{ inputs.study_hours }} hours/day</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Previous Performance</div>
+                    <div class="detail-value">{{ inputs.previous_performance }}%</div>
+                </div>
+                <div class="detail-item" style="grid-column: span 2;">
+                    <div class="detail-label">Assignment Score</div>
+                    <div class="detail-value">{{ inputs.assignment_score }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predict Again Button -->
+        <a href="{{ url_for('index') }}" class="btn-submit btn-again">Predict Again</a>
+
+        <div class="footer-note">
+            Machine Learning Models: Decision Tree &amp; Logistic Regression
+        </div>
+    </div>
+
+</body>
+</html>

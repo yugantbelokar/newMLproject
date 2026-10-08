@@ -12,6 +12,7 @@ selects the best performing model, and saves it to model.pkl.
 import pandas as pd
 import numpy as np
 import joblib
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
@@ -25,7 +26,8 @@ def train_and_evaluate():
     # ---------------------------------------------------------------
     # STEP 1: Load Dataset
     # ---------------------------------------------------------------
-    csv_file = 'dataset.csv'
+    project_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_file = os.path.join(project_dir, 'dataset.csv')
     print(f"\n[STEP 1] Loading dataset from '{csv_file}'...")
     try:
         df = pd.read_csv(csv_file)
@@ -141,7 +143,7 @@ def train_and_evaluate():
     print(f"==================================================")
 
     # Save model to model.pkl
-    model_filename = 'model.pkl'
+    model_filename = os.path.join(project_dir, 'model.pkl')
     joblib.dump(best_model, model_filename)
     print(f"\n-> Saved best model ('{best_name}') to '{model_filename}' successfully.")
     print("==================================================\n")

@@ -18,10 +18,11 @@ import numpy as np
 import joblib
 import os
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
 # Path to the trained Machine Learning model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'model.pkl')
+MODEL_PATH = os.path.join(PROJECT_DIR, 'model.pkl')
 
 def load_ml_model():
     """Load the trained machine learning model from model.pkl."""

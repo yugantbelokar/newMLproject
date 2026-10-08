@@ -1,81 +1,186 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result - Student Performance Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Student performance prediction and academic indicators."
+    />
+    <title>Prediction Result | Student Performance</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
 
-    <div class="container result-card">
-        <div class="header">
-            <h1>Student Performance Result</h1>
-            <div class="subtitle">Machine Learning Prediction Output</div>
-        </div>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="SPP home">
+          <span class="brand-mark">SPP</span>
+          <span class="brand-name">Student Performance</span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="{{ url_for('index') }}">Prediction</a>
+        </nav>
+      </header>
 
-        <!-- Prediction Result Badge -->
-        <div class="result-badge-container">
+      <main class="result-main">
+        <section class="page-heading">
+          <span class="eyebrow"><span class="sparkle">✦</span> ANALYSIS COMPLETE</span>
+          <h1>Prediction Result</h1>
+          <p>Machine Learning analysis of student performance</p>
+        </section>
+
+        <section
+          class="result-hero glass-card {% if result == 'PASS' %}result-pass{% else %}result-fail{% endif %}"
+          aria-labelledby="result-title"
+        >
+          <div class="result-orb" aria-hidden="true">
             {% if result == 'PASS' %}
-                <div class="result-badge pass">
-                    PASS ✅
-                </div>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             {% else %}
-                <div class="result-badge fail">
-                    FAIL ❌
-                </div>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8v5M12 17h.01" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
             {% endif %}
-        </div>
-
-        <!-- Result Statement -->
-        <p class="result-message">
+          </div>
+          <span class="result-overline">PREDICTED RESULT</span>
+          <h2 id="result-title">{{ result }}</h2>
+          <p class="result-message">
             {% if result == 'PASS' %}
-                The student is predicted to <strong>PASS</strong>.
+            Great! The student is predicted to pass.
             {% else %}
-                The student is predicted to <strong>FAIL</strong>.
+            The student may require additional academic support.
             {% endif %}
-        </p>
+          </p>
+          <div class="result-status">
+            <span class="status-dot"></span>
+            Prediction generated successfully
+          </div>
+        </section>
 
-        <!-- Prediction Probability Box -->
-        <div class="probability-box">
-            <div class="probability-title">Pass Probability</div>
-            <div class="probability-value">{{ pass_probability }}%</div>
-        </div>
-
-        <!-- Submitted Input Details Summary -->
-        <div class="details-section">
-            <h3>Student Performance Input Summary</h3>
-            <div class="details-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Attendance</div>
-                    <div class="detail-value">{{ inputs.attendance }}%</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Internal Marks</div>
-                    <div class="detail-value">{{ inputs.internal_marks }}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Study Hours</div>
-                    <div class="detail-value">{{ inputs.study_hours }} hours/day</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Previous Performance</div>
-                    <div class="detail-value">{{ inputs.previous_performance }}%</div>
-                </div>
-                <div class="detail-item" style="grid-column: span 2;">
-                    <div class="detail-label">Assignment Score</div>
-                    <div class="detail-value">{{ inputs.assignment_score }}</div>
-                </div>
+        <section class="probability-card glass-card" aria-labelledby="probability-title">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker">CONFIDENCE INDICATOR</span>
+              <h2 id="probability-title">Pass Probability</h2>
             </div>
-        </div>
+            <span class="probability-number">{{ pass_probability }}<small>%</small></span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="Pass probability"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="{{ pass_probability }}"
+          >
+            <div
+              class="progress-fill"
+              style="--progress: {{ pass_probability }}%"
+            ></div>
+          </div>
+          <div class="progress-labels">
+            <span>0%</span>
+            <span>Model confidence for a Pass outcome</span>
+            <span>100%</span>
+          </div>
+        </section>
 
-        <!-- Predict Again Button -->
-        <a href="{{ url_for('index') }}" class="btn-submit btn-again">Predict Again</a>
+        <section class="summary-section" aria-labelledby="summary-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">STUDENT PROFILE</span>
+              <h2 id="summary-title">Student Performance Summary</h2>
+            </div>
+            <span class="summary-count">05 INDICATORS</span>
+          </div>
 
-        <div class="footer-note">
-            Machine Learning Models: Decision Tree &amp; Logistic Regression
+          <div class="metrics-grid">
+            <article class="metric-card glass-card">
+              <span class="metric-icon icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 3v9l6.4 3.7" />
+                </svg>
+              </span>
+              <span class="metric-label">Attendance</span>
+              <strong class="metric-value">{{ inputs.attendance }}<small>%</small></strong>
+            </article>
+
+            <article class="metric-card glass-card">
+              <span class="metric-icon icon-purple" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8 6h13M8 12h13M8 18h13" />
+                  <path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2" />
+                </svg>
+              </span>
+              <span class="metric-label">Internal Marks</span>
+              <strong class="metric-value">{{ inputs.internal_marks }}</strong>
+            </article>
+
+            <article class="metric-card glass-card">
+              <span class="metric-icon icon-cyan" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+              </span>
+              <span class="metric-label">Study Hours</span>
+              <strong class="metric-value">{{ inputs.study_hours }}<small>hrs/day</small></strong>
+            </article>
+
+            <article class="metric-card glass-card">
+              <span class="metric-icon icon-pink" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 3v18h18" />
+                  <path d="m7 14 4-4 3 3 6-7" />
+                </svg>
+              </span>
+              <span class="metric-label">Previous Performance</span>
+              <strong class="metric-value">{{ inputs.previous_performance }}<small>%</small></strong>
+            </article>
+
+            <article class="metric-card glass-card">
+              <span class="metric-icon icon-amber" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8 4h8l4 4v12H4V4h4Z" />
+                  <path d="M8 4v5h8V4M8 14h8M8 17h5" />
+                </svg>
+              </span>
+              <span class="metric-label">Assignment Score</span>
+              <strong class="metric-value">{{ inputs.assignment_score }}</strong>
+            </article>
+          </div>
+        </section>
+
+        <div class="result-actions">
+          <a href="{{ url_for('index') }}" class="btn-primary btn-back">
+            <span class="button-arrow" aria-hidden="true">←</span>
+            <span>Predict Another Student</span>
+          </a>
+          <p>Each prediction is generated from the student's submitted data.</p>
         </div>
+      </main>
+
+      <footer class="site-footer">
+        <span>Student Performance</span>
+        <span>Intelligent insights for better outcomes</span>
+      </footer>
     </div>
-
-</body>
+  </body>
 </html>

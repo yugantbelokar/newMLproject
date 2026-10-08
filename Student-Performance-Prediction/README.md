@@ -192,3 +192,45 @@ Open your web browser and navigate to:
 - Integration with institutional student database (SQL/PostgreSQL).
 - Inclusion of real-time academic risk alerts sent via Email/SMS.
 - Adding feature importance charts (SHAP / feature breakdown).
+
+## Project Setup
+
+1. Clone the repository and open the `Student-Performance-Prediction` directory.
+2. Create and activate a virtual environment:
+
+   ```bash
+   python -m venv .venv
+   ```
+
+   Windows:
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   macOS/Linux:
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run locally:
+
+   ```bash
+   python app.py
+   ```
+
+5. Open <http://127.0.0.1:5000>.
+
+## Deployment on Render
+
+In the Render Web Service settings, set **Root Directory** to
+`Student-Performance-Prediction`, **Build Command** to
+`pip install -r requirements.txt`, and **Start Command** to
+`gunicorn app:app`. Render runs Gunicorn on its supported Linux environment.

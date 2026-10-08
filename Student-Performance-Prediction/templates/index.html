@@ -1,158 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Performance Prediction System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Predict student performance using machine learning."
+    />
+    <title>Student Performance</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Student Performance Prediction System</h1>
-            <div class="subtitle">Predict student academic performance using Machine Learning</div>
-            <p class="description">
-                This system uses Machine Learning to predict whether a student is likely to Pass or Fail based on academic performance and study-related factors.
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="SPP home">
+          <span class="brand-mark">SPP</span>
+          <span class="brand-name">Student Performance</span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#prediction">Prediction</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" id="prediction">
+          <div class="hero-copy">
+            <h1>Student Performance<br /><span>Prediction System</span></h1>
+            <p class="hero-subtitle">
+              Predict student performance using Machine Learning
             </p>
-        </div>
+            <p class="hero-description">
+              Enter the student's academic information below to generate an
+              intelligent Pass/Fail prediction.
+            </p>
+          </div>
+          <div class="model-status" role="status">
+            <span class="status-dot"></span>
+            <span>ML MODEL ONLINE</span>
+          </div>
+        </section>
 
-        {% if error %}
-            <div class="alert">
-                ❌ {{ error }}
-            </div>
-        {% endif %}
-
-        <form action="{{ url_for('predict') }}" method="POST" class="prediction-form" id="predictionForm">
-            <!-- 1. Attendance Percentage -->
-            <div class="form-group">
-                <label for="attendance">1. Attendance Percentage (%)</label>
-                <input 
-                    type="number" 
-                    id="attendance" 
-                    name="attendance" 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    placeholder="e.g. 85" 
-                    value="{{ form_data.get('attendance', '') }}" 
-                    required
-                >
-                <span class="hint">Valid range: 0% to 100%</span>
-            </div>
-
-            <!-- 2. Internal Marks -->
-            <div class="form-group">
-                <label for="internal_marks">2. Internal Marks (Out of 100)</label>
-                <input 
-                    type="number" 
-                    id="internal_marks" 
-                    name="internal_marks" 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    placeholder="e.g. 72" 
-                    value="{{ form_data.get('internal_marks', '') }}" 
-                    required
-                >
-                <span class="hint">Valid range: 0 to 100</span>
+        <section class="workspace">
+          <div class="form-card glass-card">
+            <div class="card-heading">
+              <div class="heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path
+                    d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+                  />
+                  <path d="M8 7h8M8 11h8" />
+                </svg>
+              </div>
+              <div>
+                <h2>Student Performance Data</h2>
+                <p>Enter the student's academic details</p>
+              </div>
             </div>
 
-            <!-- 3. Study Hours per Day -->
-            <div class="form-group">
-                <label for="study_hours">3. Study Hours Per Day</label>
-                <input 
-                    type="number" 
-                    id="study_hours" 
-                    name="study_hours" 
-                    min="0" 
-                    max="24" 
-                    step="0.5" 
-                    placeholder="e.g. 4" 
-                    value="{{ form_data.get('study_hours', '') }}" 
-                    required
-                >
-                <span class="hint">Valid range: 0 to 24 hours/day</span>
+            {% if error %}
+            <div class="alert" role="alert">
+              <span aria-hidden="true">!</span>{{ error }}
             </div>
+            {% endif %}
 
-            <!-- 4. Previous Performance Percentage -->
-            <div class="form-group">
-                <label for="previous_performance">4. Previous Performance Percentage (%)</label>
-                <input 
-                    type="number" 
-                    id="previous_performance" 
-                    name="previous_performance" 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    placeholder="e.g. 70" 
-                    value="{{ form_data.get('previous_performance', '') }}" 
-                    required
-                >
-                <span class="hint">Valid range: 0% to 100%</span>
-            </div>
+            <form
+              action="{{ url_for('predict') }}"
+              method="POST"
+              class="prediction-form"
+              id="predictionForm"
+            >
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="attendance">
+                    <span class="field-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 3v9l6.4 3.7" />
+                        <circle cx="12" cy="12" r="9" />
+                      </svg>
+                    </span>
+                    Attendance
+                  </label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="attendance"
+                      name="attendance"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      placeholder="Enter attendance percentage"
+                      value="{{ form_data.get('attendance', '') }}"
+                      aria-describedby="attendance-hint"
+                      required
+                    />
+                    <span class="input-suffix" aria-hidden="true">%</span>
+                  </div>
+                  <span class="field-hint" id="attendance-hint">0–100%</span>
+                </div>
 
-            <!-- 5. Assignment Score -->
-            <div class="form-group">
-                <label for="assignment_score">5. Assignment Score (Out of 100)</label>
-                <input 
-                    type="number" 
-                    id="assignment_score" 
-                    name="assignment_score" 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    placeholder="e.g. 80" 
-                    value="{{ form_data.get('assignment_score', '') }}" 
-                    required
-                >
-                <span class="hint">Valid range: 0 to 100</span>
-            </div>
+                <div class="form-group">
+                  <label for="internal_marks">
+                    <span class="field-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M8 6h13M8 12h13M8 18h13" />
+                        <path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2" />
+                      </svg>
+                    </span>
+                    Internal Marks
+                  </label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="internal_marks"
+                      name="internal_marks"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      placeholder="Enter marks"
+                      value="{{ form_data.get('internal_marks', '') }}"
+                      aria-describedby="internal-marks-hint"
+                      required
+                    />
+                  </div>
+                  <span class="field-hint" id="internal-marks-hint"
+                    >Score out of 100</span
+                  >
+                </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn-submit">Predict Performance</button>
-        </form>
+                <div class="form-group">
+                  <label for="study_hours">
+                    <span class="field-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                      </svg>
+                    </span>
+                    Study Hours
+                  </label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="study_hours"
+                      name="study_hours"
+                      min="0"
+                      max="24"
+                      step="0.5"
+                      placeholder="Hours per day"
+                      value="{{ form_data.get('study_hours', '') }}"
+                      aria-describedby="study-hours-hint"
+                      required
+                    />
+                    <span class="input-suffix" aria-hidden="true">hrs/day</span>
+                  </div>
+                  <span class="field-hint" id="study-hours-hint"
+                    >0–24 hours each day</span
+                  >
+                </div>
 
-        <div class="footer-note">
-            Machine Learning Models: Decision Tree &amp; Logistic Regression
-        </div>
+                <div class="form-group">
+                  <label for="previous_performance">
+                    <span class="field-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18" />
+                        <path d="m7 14 4-4 3 3 6-7" />
+                      </svg>
+                    </span>
+                    Previous Performance
+                  </label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="previous_performance"
+                      name="previous_performance"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      placeholder="Enter previous performance"
+                      value="{{ form_data.get('previous_performance', '') }}"
+                      aria-describedby="previous-performance-hint"
+                      required
+                    />
+                    <span class="input-suffix" aria-hidden="true">%</span>
+                  </div>
+                  <span class="field-hint" id="previous-performance-hint"
+                    >Previous academic result</span
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="assignment_score">
+                    <span class="field-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M8 4h8l4 4v12H4V4h4Z" />
+                        <path d="M8 4v5h8V4M8 14h8M8 17h5" />
+                      </svg>
+                    </span>
+                    Assignment Score
+                  </label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="assignment_score"
+                      name="assignment_score"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      placeholder="Enter assignment score"
+                      value="{{ form_data.get('assignment_score', '') }}"
+                      aria-describedby="assignment-score-hint"
+                      required
+                    />
+                  </div>
+                  <span class="field-hint" id="assignment-score-hint"
+                    >Score out of 100</span
+                  >
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary" id="predictButton">
+                <span>Predict Performance</span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+              <p class="form-note">
+                <span class="lock-icon" aria-hidden="true">◈</span>
+                Your student data is used only to generate this prediction.
+              </p>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>Student Performance</span>
+        <span>Intelligent insights for better outcomes</span>
+      </footer>
     </div>
 
-    <!-- Simple JavaScript Client-Side Validation -->
     <script>
-        document.getElementById('predictionForm').addEventListener('submit', function(e) {
-            const attendance = parseFloat(document.getElementById('attendance').value);
-            const internalMarks = parseFloat(document.getElementById('internal_marks').value);
-            const studyHours = parseFloat(document.getElementById('study_hours').value);
-            const previousPerf = parseFloat(document.getElementById('previous_performance').value);
-            const assignmentScore = parseFloat(document.getElementById('assignment_score').value);
-
-            if (isNaN(attendance) || attendance < 0 || attendance > 100) {
-                alert('Please enter a valid Attendance percentage between 0 and 100.');
-                e.preventDefault();
-                return;
-            }
-            if (isNaN(internalMarks) || internalMarks < 0 || internalMarks > 100) {
-                alert('Please enter valid Internal Marks between 0 and 100.');
-                e.preventDefault();
-                return;
-            }
-            if (isNaN(studyHours) || studyHours < 0 || studyHours > 24) {
-                alert('Please enter valid Study Hours between 0 and 24.');
-                e.preventDefault();
-                return;
-            }
-            if (isNaN(previousPerf) || previousPerf < 0 || previousPerf > 100) {
-                alert('Please enter a valid Previous Performance percentage between 0 and 100.');
-                e.preventDefault();
-                return;
-            }
-            if (isNaN(assignmentScore) || assignmentScore < 0 || assignmentScore > 100) {
-                alert('Please enter a valid Assignment Score between 0 and 100.');
-                e.preventDefault();
-                return;
-            }
+      document
+        .getElementById("predictionForm")
+        .addEventListener("submit", function () {
+          const button = document.getElementById("predictButton");
+          button.disabled = true;
+          button.classList.add("is-loading");
+          button.querySelector("span").textContent = "Analyzing performance...";
         });
     </script>
-</body>
+  </body>
 </html>
